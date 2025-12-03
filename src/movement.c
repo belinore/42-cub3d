@@ -6,75 +6,75 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:05:02 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/02 16:05:03 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:14:43 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_pointf	get_new_position(t_game *game, double speed, int keycode)
+t_pointf	get_new_position(t_game *g, double speed, int keycode)
 {
 	t_pointf	new;
 
-	speed *= game->dt;
+	speed *= g->dt;
 	if (keycode == W_KEY || keycode == UP_ARROW)
 	{
-		new.x = game->player.pos_x + game->player.dir_x * speed;
-		new.y = game->player.pos_y + game->player.dir_y * speed;
+		new.x = g->player.pos_x + g->player.dir_x * speed;
+		new.y = g->player.pos_y + g->player.dir_y * speed;
 	}
 	else if (keycode == S_KEY || keycode == DOWN_ARROW)
 	{
-		new.x = game->player.pos_x - game->player.dir_x * speed;
-		new.y = game->player.pos_y - game->player.dir_y * speed;
+		new.x = g->player.pos_x - g->player.dir_x * speed;
+		new.y = g->player.pos_y - g->player.dir_y * speed;
 	}
 	if (keycode == D_KEY)
 	{
-		new.x = game->player.pos_x + game->player.plane_x * speed;
-		new.y = game->player.pos_y + game->player.plane_y * speed;
+		new.x = g->player.pos_x + g->player.plane_x * speed;
+		new.y = g->player.pos_y + g->player.plane_y * speed;
 	}
 	else if (keycode == A_KEY)
 	{
-		new.x = game->player.pos_x - game->player.plane_x * speed;
-		new.y = game->player.pos_y - game->player.plane_y * speed;
+		new.x = g->player.pos_x - g->player.plane_x * speed;
+		new.y = g->player.pos_y - g->player.plane_y * speed;
 	}
 	return (new);
 }
 
-int	is_valid_move(t_game *game, double x, double y)
+int	is_valid_move(t_game *g, double x, double y)
 {
 	double	r;
 
 	r = PLAYER_RADIUS;
-	if (game->map[(int)(y + r)][(int)(x + r)] == '1' || game->map[(int)(y
-			+ r)][(int)(x - r)] == '1' || game->map[(int)(y - r)][(int)(x
-			+ r)] == '1' || game->map[(int)(y - r)][(int)(x - r)] == '1')
+	if (g->map[(int)(y + r)][(int)(x + r)] == '1' || g->map[(int)(y
+			+ r)][(int)(x - r)] == '1' || g->map[(int)(y - r)][(int)(x
+			+ r)] == '1' || g->map[(int)(y - r)][(int)(x - r)] == '1')
 		return (0);
 	return (1);
 }
 
-void	move_player(t_game *game, double speed, int keycode)
+void	move_player(t_game *g, double speed, int keycode)
 {
 	t_pointf	new;
 
-	new = get_new_position(game, speed, keycode);
-	if (new.x < 0 || new.x >= game->map_width || new.y < 0
-		|| new.y >= game->map_height)
+	new = get_new_position(g, speed, keycode);
+	if (new.x < 0 || new.x >= g->map_width || new.y < 0
+		|| new.y >= g->map_height)
 		return ;
-	if (is_valid_move(game, new.x, game->player.pos_y))
+	if (is_valid_move(g, new.x, g->player.pos_y))
 	{
-		game->player.pos_x = new.x;
-		game->player.map_x = (int)new.x;
-		game->player.pixel.x = (int)(new.x * TILE_SIZE);
+		g->player.pos_x = new.x;
+		g->player.map_x = (int)new.x;
+		g->player.pixel.x = (int)(new.x * g->tile_size);
 	}
-	if (is_valid_move(game, game->player.pos_x, new.y))
+	if (is_valid_move(g, g->player.pos_x, new.y))
 	{
-		game->player.pos_y = new.y;
-		game->player.map_y = (int)new.y;
-		game->player.pixel.y = (int)(new.y * TILE_SIZE);
+		g->player.pos_y = new.y;
+		g->player.map_y = (int)new.y;
+		g->player.pixel.y = (int)(new.y * g->tile_size);
 	}
 }
 
-void	rotate_player(t_game *game, double rot_speed_radians)
+void	rotate_player(t_game *g, double rot_speed_radians)
 {
 	double		old_dir_x;
 	double		old_plane_x;
@@ -82,8 +82,8 @@ void	rotate_player(t_game *game, double rot_speed_radians)
 	double		sin_angle;
 	t_player	*player;
 
-	player = &game->player;
-	rot_speed_radians *= game->dt;
+	player = &g->player;
+	rot_speed_radians *= g->dt;
 	cos_angle = cos(rot_speed_radians);
 	sin_angle = sin(rot_speed_radians);
 	old_dir_x = player->dir_x;
@@ -94,18 +94,18 @@ void	rotate_player(t_game *game, double rot_speed_radians)
 	player->plane_y = old_plane_x * sin_angle + player->plane_y * cos_angle;
 }
 
-void	handle_events(t_game *game)
+void	handle_events(t_game *g)
 {
-	if (game->key_states.move_forward)
-		move_player(game, MOVE_SPEED, W_KEY);
-	if (game->key_states.move_backward)
-		move_player(game, MOVE_SPEED, S_KEY);
-	if (game->key_states.strafe_right)
-		move_player(game, MOVE_SPEED, D_KEY);
-	if (game->key_states.strafe_left)
-		move_player(game, MOVE_SPEED, A_KEY);
-	if (game->key_states.rotate_right)
-		rotate_player(game, ROTATION_SPEED);
-	if (game->key_states.rotate_left)
-		rotate_player(game, -ROTATION_SPEED);
+	if (g->key_states.move_forward)
+		move_player(g, MOVE_SPEED, W_KEY);
+	if (g->key_states.move_backward)
+		move_player(g, MOVE_SPEED, S_KEY);
+	if (g->key_states.strafe_right)
+		move_player(g, MOVE_SPEED, D_KEY);
+	if (g->key_states.strafe_left)
+		move_player(g, MOVE_SPEED, A_KEY);
+	if (g->key_states.rotate_right)
+		rotate_player(g, ROTATION_SPEED);
+	if (g->key_states.rotate_left)
+		rotate_player(g, -ROTATION_SPEED);
 }

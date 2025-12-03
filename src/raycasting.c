@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:08:19 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/02 17:08:22 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:16:25 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	move_to_next_gridline(t_ray *ray, int *map_x, int *map_y)
 //it is total_dist - delta_dist since we detected the wall on the last step,
 //	and want to stop on the map square before the wall.
 //wall.hit_pos is calculated by adding the distance from player along ray dir
-void	cast_ray(t_game *game, t_ray *ray)
+void	cast_ray(t_game *g, t_ray *ray)
 {
 	int	map_x;
 	int	map_y;
@@ -47,13 +47,13 @@ void	cast_ray(t_game *game, t_ray *ray)
 
 	ray->total_dist_x = ray->side_dist_x;
 	ray->total_dist_y = ray->side_dist_y;
-	map_x = game->player.map_x;
-	map_y = game->player.map_y;
+	map_x = g->player.map_x;
+	map_y = g->player.map_y;
 	hit = 0;
 	while (hit == 0)
 	{
 		move_to_next_gridline(ray, &map_x, &map_y);
-		if (game->map[map_y][map_x] == '1')
+		if (g->map[map_y][map_x] == '1')
 		{
 			hit = 1;
 			ray->wall.map_tile_x = map_x;
@@ -64,18 +64,18 @@ void	cast_ray(t_game *game, t_ray *ray)
 		ray->perp_wall_dist = ray->total_dist_x - ray->delta_dist_x;
 	else
 		ray->perp_wall_dist = ray->total_dist_y - ray->delta_dist_y;
-	ray->wall.hit_pos_x = game->player.pos_x + ray->perp_wall_dist * ray->dir_x;
-	ray->wall.hit_pos_y = game->player.pos_y + ray->perp_wall_dist * ray->dir_y;
+	ray->wall.hit_pos_x = g->player.pos_x + ray->perp_wall_dist * ray->dir_x;
+	ray->wall.hit_pos_y = g->player.pos_y + ray->perp_wall_dist * ray->dir_y;
 }
 
 //Calculate ray direction for each column of the screen
 //ray direction is the sum of the player direction vector
 //	and the scaled camera plane vector
-void	calc_ray_direction(t_game *game, t_ray *ray, int column)
+void	calc_ray_direction(t_game *g, t_ray *ray, int column)
 {
-	ray->camera_x = game->camera_x[column];
-	ray->dir_x = game->player.dir_x + game->player.plane_x * ray->camera_x;
-	ray->dir_y = game->player.dir_y + game->player.plane_y * ray->camera_x;
+	ray->camera_x = g->camera_x[column];
+	ray->dir_x = g->player.dir_x + g->player.plane_x * ray->camera_x;
+	ray->dir_y = g->player.dir_y + g->player.plane_y * ray->camera_x;
 	if (ray->dir_x == 0)
 		ray->dir_x = 1e-9;
 	if (ray->dir_y == 0)
@@ -120,7 +120,7 @@ void	calc_dda_distances(t_ray *ray, t_player *player)
 	}
 }
 
-void	raycasting(t_game *game)
+void	raycasting(t_game *g)
 {
 	t_ray	*ray;
 	int		column;
@@ -128,12 +128,12 @@ void	raycasting(t_game *game)
 	column = 0;
 	while (column < WIDTH)
 	{
-		ray = &game->rays[column];
-		calc_ray_direction(game, ray, column);
-		calc_dda_distances(ray, &game->player);
-		cast_ray(game, ray);
-		calc_wall_height_and_texture(game, ray, column);
-		draw_wall_slice(game, &ray->wall);
+		ray = &g->rays[column];
+		calc_ray_direction(g, ray, column);
+		calc_dda_distances(ray, &g->player);
+		cast_ray(g, ray);
+		calc_wall_height_and_texture(g, ray, column);
+		draw_wall_slice(g, &ray->wall);
 		column++;
 	}
 	return ;

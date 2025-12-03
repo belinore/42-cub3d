@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:40:55 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/02 15:41:34 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:36:58 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	draw_tile(t_game *game, t_point pixel, int color)
 	int	end_y;
 	int	start_x;
 
-	end_x = pixel.x + TILE_SIZE;
-	end_y = pixel.y + TILE_SIZE;
+	end_x = pixel.x + game->tile_size;
+	end_y = pixel.y + game->tile_size;
 	if (end_x > WIDTH)
 		end_x = WIDTH;
 	if (end_y > HEIGHT)

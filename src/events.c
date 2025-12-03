@@ -6,15 +6,15 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:42:48 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/02 15:42:50 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:11:28 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	close_window(t_game *vars)
+int	close_window(t_game *g)
 {
-	destroy_display_and_exit(vars, NULL);
+	destroy_display_and_exit(g, NULL);
 	return (0);
 }
 
@@ -34,41 +34,51 @@ void	update_key_states(int keycode, t_keys *keys, int toggle)
 		keys->rotate_right = toggle;
 }
 
-int	key_handler(int keycode, t_game *game)
+int	key_handler(int keycode, t_game *g)
 {
 	if (keycode == P_KEY)
-		game->key_states.pause = !game->key_states.pause;
+		g->key_states.pause = !g->key_states.pause;
+	else if (keycode == ENTER_KEY)
+	{
+		g->fov += 5 * PI / 180;
+		init_camera(g);
+	}
+	else if (keycode == BACKSPACE)
+	{
+		g->fov -= 5 * PI / 180;
+		init_camera(g);
+	}
 	else if (keycode == ESC)
-		destroy_display_and_exit(game, NULL);
+		destroy_display_and_exit(g, NULL);
 	else
-		update_key_states(keycode, &game->key_states, 1);
+		update_key_states(keycode, &g->key_states, 1);
 	return (0);
 }
 
-int	key_release_handler(int keycode, t_game *game)
+int	key_release_handler(int keycode, t_game *g)
 {
-	update_key_states(keycode, &game->key_states, 0);
+	update_key_states(keycode, &g->key_states, 0);
 	return (0);
 }
 
-int	mouse_move_handler(int x, int y, t_game *game)
+int	mouse_move_handler(int x, int y, t_game *g)
 {
 	int		dx;
 	double	rot_speed;
 
-	if (game->key_states.pause || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+	if (g->key_states.pause || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
 		return (0);
-	game->mouse_y = HEIGHT - y;
-	dx = x - game->mouse_x;
+	g->mouse_y = HEIGHT - y;
+	dx = x - g->mouse_x;
 	if (dx == 0)
 		return (0);
 	rot_speed = dx * MOUSE_SENSITIVITY;
-	rotate_player(game, rot_speed);
+	rotate_player(g, rot_speed);
 	if (x == 0)
-		game->mouse_x = x + 7;
+		g->mouse_x = x + 7;
 	else if (x == WIDTH - 1)
-		game->mouse_x = x - 7;
+		g->mouse_x = x - 7;
 	else
-		game->mouse_x = x;
+		g->mouse_x = x;
 	return (0);
 }

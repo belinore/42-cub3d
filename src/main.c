@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:03:53 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 13:53:08 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:09:34 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,25 @@ MacOs:
 4) Make as normal
 */
 
-void	destroy_display_and_exit(t_game *vars, char *msg)
+void	destroy_display_and_exit(t_game *g, char *msg)
 {
-	if (vars->img.img_ptr)
-		mlx_destroy_image(vars->mlx, vars->img.img_ptr);
-	if (vars->textures.north.img_ptr)
-		mlx_destroy_image(vars->mlx, vars->textures.north.img_ptr);
-	if (vars->textures.south.img_ptr)
-		mlx_destroy_image(vars->mlx, vars->textures.south.img_ptr);
-	if (vars->textures.east.img_ptr)
-		mlx_destroy_image(vars->mlx, vars->textures.east.img_ptr);
-	if (vars->textures.south.img_ptr)
-		mlx_destroy_image(vars->mlx, vars->textures.west.img_ptr);
-	if (vars->window)
-		mlx_destroy_window(vars->mlx, vars->window);
-	if (vars->mlx)
+	if (g->img.img_ptr)
+		mlx_destroy_image(g->mlx, g->img.img_ptr);
+	if (g->textures.north.img_ptr)
+		mlx_destroy_image(g->mlx, g->textures.north.img_ptr);
+	if (g->textures.south.img_ptr)
+		mlx_destroy_image(g->mlx, g->textures.south.img_ptr);
+	if (g->textures.east.img_ptr)
+		mlx_destroy_image(g->mlx, g->textures.east.img_ptr);
+	if (g->textures.south.img_ptr)
+		mlx_destroy_image(g->mlx, g->textures.west.img_ptr);
+	if (g->window)
+		mlx_destroy_window(g->mlx, g->window);
+	if (g->mlx)
 	{
-		mlx_loop_end(vars->mlx);
-		mlx_destroy_display(vars->mlx);
-		free(vars->mlx);
+		mlx_loop_end(g->mlx);
+		mlx_destroy_display(g->mlx);
+		free(g->mlx);
 	}
 	if (msg)
 	{

@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 13:48:55 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:30:44 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@
 # define WIDTH 1280//640
 # define HEIGHT 720//400
 
-//TO CHANGE TO VARIABLES-> norminette issue
-# define TILE_SIZE (HEIGHT / 25)
-# define FOV (M_PI / 2.5) //72 degrees
-
 # define MAX_RAY_LENGTH 1000
 # define ROTATION_SPEED 2
 # define MOVE_SPEED 2
@@ -37,6 +33,7 @@
 # define HORIZONAL_GRIDLINE 1
 # define PLAYER_RADIUS 0.1
 # define MS_PER_FRAME 1600
+# define PI 3.14159265358979323846
 
 //COLORS
 # define RED 0xFF0000
@@ -62,6 +59,8 @@
 # define UP_ARROW 65362
 # define DOWN_ARROW 65364
 # define P_KEY 112
+# define ENTER_KEY 65293
+# define BACKSPACE 65288
 
 // // KEYCODES MACOS
 // # define ESC 53
@@ -74,6 +73,8 @@
 // # define UP_ARROW 126
 // # define DOWN_ARROW 125
 // # define P_KEY 35
+// # define ENTER_KEY 36
+// # define BACKSPACE 51
 
 enum
 {
@@ -182,13 +183,15 @@ typedef struct s_game
 	void		*window;
 	t_img		img;
 	t_texture	textures;
+	t_player	player;
+	t_keys		key_states;
 	char		**map;
 	int			map_height;
 	int			map_width;
+	double		fov;
+	int			tile_size;
 	double		camera_x[WIDTH];
 	double		dist_to_camera_plane;
-	t_player	player;
-	t_keys		key_states;
 	t_ray		rays[WIDTH];
 	uint64_t	last_frame_time;
 	double		dt;
@@ -197,33 +200,33 @@ typedef struct s_game
 }				t_game;
 
 //main.c
-void		destroy_display_and_exit(t_game *vars, char *msg);
+void		destroy_display_and_exit(t_game *g, char *msg);
 
 //init_mlx.c
-void		load_texture_to_buffer(t_game *game, t_img *img, char *path);
-void		init_textures(t_game *game);
-void		init_hooks(t_game *game);
-void		init_mlx(t_game *vars);
+void		load_texture_to_buffer(t_game *g, t_img *img, char *path);
+void		init_textures(t_game *g);
+void		init_hooks(t_game *g);
+void		init_mlx(t_game *g);
 
 //init_game.c
-void		init_camera_x(t_game *game);
-void		set_player_direction(t_game *game, char direction);
-void		init_player(t_game *game);
-void		init_game(t_game *game);
+void		init_camera(t_game *g);
+void		set_player_direction(t_game *g, char direction);
+void		init_player(t_game *g);
+void		init_game(t_game *g);
 
 //events.c
-int			close_window(t_game *vars);
+int			close_window(t_game *g);
 void		update_key_states(int keycode, t_keys *keys, int toggle);
-int			key_handler(int keycode, t_game *vars);
-int			key_release_handler(int keycode, t_game *game);
-int			mouse_move_handler(int x, int y, t_game *game);
+int			key_handler(int keycode, t_game *g);
+int			key_release_handler(int keycode, t_game *g);
+int			mouse_move_handler(int x, int y, t_game *g);
 
 //movement.c
-t_pointf	get_new_position(t_game *game, double speed, int keycode);
-int			is_valid_move(t_game *game, double x, double y);
-void		move_player(t_game *game, double speed, int keycode);
-void		rotate_player(t_game *game, double rot_speed_radians);
-void		handle_events(t_game *game);
+t_pointf	get_new_position(t_game *g, double speed, int keycode);
+int			is_valid_move(t_game *g, double x, double y);
+void		move_player(t_game *g, double speed, int keycode);
+void		rotate_player(t_game *g, double rot_speed_radians);
+void		handle_events(t_game *g);
 
 //render.c
 void		put_pixel(t_img *img, int x, int y, int color);
@@ -234,22 +237,21 @@ int			render_frame(t_game *vars);
 
 //raycasting.c
 void		move_to_next_gridline(t_ray *ray, int *map_x, int *map_y);
-void		cast_ray(t_game *game, t_ray *ray);
-void		calc_ray_direction(t_game *game, t_ray *ray, int column);
+void		cast_ray(t_game *g, t_ray *ray);
+void		calc_ray_direction(t_game *g, t_ray *ray, int column);
 void		calc_dda_distances(t_ray *ray, t_player *player);
-void		raycasting(t_game *game);
+void		raycasting(t_game *g);
 
 //raycasting2.c
-t_img		*get_wall_texture(t_game *game, t_ray *ray);
-void		draw_wall_slice(t_game *game, t_wall *wall);
-void		calc_wall_height_and_texture(t_game *game, t_ray *ray, int column);
+t_img		*get_wall_texture(t_game *g, t_ray *ray);
+void		draw_wall_slice(t_game *g, t_wall *wall);
+void		calc_wall_height_and_texture(t_game *g, t_ray *ray, int column);
 
 //minimap.c
-void		draw_scaled_texture_tile(t_img *img, t_img *tex_img,
-				t_point *start_pixel, int size);
-void		raycasting_minimap(t_game *game);
-void		draw_player(t_game *game);
-void		draw_minimap(t_game *game);
+void		raycasting_minimap(t_game *g);
+void		draw_player(t_game *g);
+void		draw_minimap_tile(t_game *g, t_point *pixel, int i, int j);
+void		draw_minimap(t_game *g);
 
 //utils.c
 uint64_t	get_time_in_ms(void);

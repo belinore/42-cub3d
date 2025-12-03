@@ -6,14 +6,14 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:58:56 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/02 16:00:43 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:18:53 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 //raycasting visualisaton on minimap using data from stored rays
-void	raycasting_minimap(t_game *game)
+void	raycasting_minimap(t_game *g)
 {
 	t_ray	*ray;
 	t_point	wall_hit_pixel;
@@ -23,67 +23,67 @@ void	raycasting_minimap(t_game *game)
 	i = 0;
 	while (i < WIDTH)
 	{
-		ray = &game->rays[i];
-		wall_hit_pixel.x = (int)(ray->wall.hit_pos_x * TILE_SIZE);
-		wall_hit_pixel.y = (int)(ray->wall.hit_pos_y * TILE_SIZE);
-		draw_line(&game->img, game->player.pixel, wall_hit_pixel, GREEN);
-		wall_map_pixel.x = (int)(ray->wall.map_tile_x * TILE_SIZE);
-		wall_map_pixel.y = (int)(ray->wall.map_tile_y * TILE_SIZE);
-		draw_scaled_texture_tile(&game->img, ray->wall.texture,
-			&wall_map_pixel, TILE_SIZE);
+		ray = &g->rays[i];
+		wall_hit_pixel.x = (int)(ray->wall.hit_pos_x * g->tile_size);
+		wall_hit_pixel.y = (int)(ray->wall.hit_pos_y * g->tile_size);
+		draw_line(&g->img, g->player.pixel, wall_hit_pixel, GREEN);
+		wall_map_pixel.x = (int)(ray->wall.map_tile_x * g->tile_size);
+		wall_map_pixel.y = (int)(ray->wall.map_tile_y * g->tile_size);
+		draw_scaled_texture_tile(&g->img, ray->wall.texture,
+			&wall_map_pixel, g->tile_size);
 		i++;
 	}
 }
 
-void	draw_player(t_game *game)
+void	draw_player(t_game *g)
 {
 	t_point	line_end;
 	t_point	circle_center;
 	int		radius;
 	int		line_len;
 
-	if (game->player.pixel.x < 0 || game->player.pixel.x >= WIDTH
-		|| game->player.pixel.y < 0 || game->player.pixel.y >= HEIGHT)
+	if (g->player.pixel.x < 0 || g->player.pixel.x >= WIDTH
+		|| g->player.pixel.y < 0 || g->player.pixel.y >= HEIGHT)
 		return ;
-	radius = TILE_SIZE / 4;
-	circle_center.x = game->player.pixel.x;
-	circle_center.y = game->player.pixel.y;
-	draw_circle(&game->img, circle_center, radius, YELLOW);
+	radius = g->tile_size / 4;
+	circle_center.x = g->player.pixel.x;
+	circle_center.y = g->player.pixel.y;
+	draw_circle(&g->img, circle_center, radius, YELLOW);
 	if (DEBUG_MODE)
-		raycasting_minimap(game);
-	line_len = TILE_SIZE / 3;
-	line_end.x = game->player.pixel.x + game->player.dir_x * line_len;
-	line_end.y = game->player.pixel.y + game->player.dir_y * line_len;
-	draw_line(&game->img, game->player.pixel, line_end, RED);
+		raycasting_minimap(g);
+	line_len = g->tile_size / 3;
+	line_end.x = g->player.pixel.x + g->player.dir_x * line_len;
+	line_end.y = g->player.pixel.y + g->player.dir_y * line_len;
+	draw_line(&g->img, g->player.pixel, line_end, RED);
 }
 
-void	draw_minimap_tile(t_game *game, t_point *pixel, int i, int j)
+void	draw_minimap_tile(t_game *g, t_point *pixel, int i, int j)
 {
-	if ((game->map[i][j] == '1' && i == 0)
-		|| (game->map[i][j] == '1' && game->map[i - 1][j] == ' '))
-		draw_scaled_texture_tile(&game->img, &game->textures.north,
-			pixel, TILE_SIZE);
-	else if ((game->map[i][j] == '1' && i == game->map_height - 1)
-		|| (game->map[i][j] == '1' && game->map[i + 1][j] == ' '))
-		draw_scaled_texture_tile(&game->img, &game->textures.south,
-			pixel, TILE_SIZE);
-	else if ((game->map[i][j] == '1' && j == 0)
-		|| (game->map[i][j] == '1' && game->map[i][j - 1] == ' '))
-		draw_scaled_texture_tile(&game->img, &game->textures.west,
-			pixel, TILE_SIZE);
-	else if ((game->map[i][j] == '1' && j == game->map_width - 1)
-		|| (game->map[i][j] == '1' && game->map[i][j + 1] == ' '))
-		draw_scaled_texture_tile(&game->img, &game->textures.east,
-			pixel, TILE_SIZE);
-	else if (game->map[i][j] == '1')
-		draw_tile(game, *pixel, BLACK);
-	else if (game->map[i][j] == ' ')
-		draw_tile(game, *pixel, WHITE);
+	if ((g->map[i][j] == '1' && i == 0)
+		|| (g->map[i][j] == '1' && g->map[i - 1][j] == ' '))
+		draw_scaled_texture_tile(&g->img, &g->textures.north,
+			pixel, g->tile_size);
+	else if ((g->map[i][j] == '1' && i == g->map_height - 1)
+		|| (g->map[i][j] == '1' && g->map[i + 1][j] == ' '))
+		draw_scaled_texture_tile(&g->img, &g->textures.south,
+			pixel, g->tile_size);
+	else if ((g->map[i][j] == '1' && j == 0)
+		|| (g->map[i][j] == '1' && g->map[i][j - 1] == ' '))
+		draw_scaled_texture_tile(&g->img, &g->textures.west,
+			pixel, g->tile_size);
+	else if ((g->map[i][j] == '1' && j == g->map_width - 1)
+		|| (g->map[i][j] == '1' && g->map[i][j + 1] == ' '))
+		draw_scaled_texture_tile(&g->img, &g->textures.east,
+			pixel, g->tile_size);
+	else if (g->map[i][j] == '1')
+		draw_tile(g, *pixel, BLACK);
+	else if (g->map[i][j] == ' ')
+		draw_tile(g, *pixel, WHITE);
 	else
-		draw_tile(game, *pixel, LIGHT_GREY);
+		draw_tile(g, *pixel, LIGHT_GREY);
 }
 
-void	draw_minimap(t_game *game)
+void	draw_minimap(t_game *g)
 {
 	int		i;
 	int		j;
@@ -91,22 +91,22 @@ void	draw_minimap(t_game *game)
 
 	i = 0;
 	pixel.y = 0;
-	while (game->map[i])
+	while (g->map[i])
 	{
 		j = 0;
 		pixel.x = 0;
-		while (j < game->map_width)
+		while (j < g->map_width)
 		{
-			draw_minimap_tile(game, &pixel, i, j);
-			pixel.x += TILE_SIZE;
+			draw_minimap_tile(g, &pixel, i, j);
+			pixel.x += g->tile_size;
 			if (pixel.x >= WIDTH)
 				break ;
 			j++;
 		}
-		pixel.y += TILE_SIZE;
+		pixel.y += g->tile_size;
 		if (pixel.y >= HEIGHT)
 			break ;
 		i++;
 	}
-	draw_player(game);
+	draw_player(g);
 }
