@@ -91,10 +91,6 @@ enum
 	ON_DESTROY = 17
 };
 
-/* ************************************************************************** */
-/*                                 IMAGE                                      */
-/* ************************************************************************** */
-
 typedef struct s_img
 {
 	void	*img_ptr;
@@ -105,10 +101,6 @@ typedef struct s_img
 	int		width;
 	int		height;
 }	t_img;
-
-/* ************************************************************************** */
-/*                                 POINTS                                     */
-/* ************************************************************************** */
 
 typedef struct s_point
 {
@@ -122,11 +114,6 @@ typedef struct s_pointf
 	double	y;
 }	t_pointf;
 
-/* ************************************************************************** */
-/*                               TEXTURE PATHS                                */
-/*                 (parser → stores .xpm file paths only)                     */
-/* ************************************************************************** */
-
 typedef struct s_tex_path
 {
 	char	*north_path;
@@ -134,11 +121,6 @@ typedef struct s_tex_path
 	char	*west_path;
 	char	*east_path;
 }	t_tex_path;
-
-/* ************************************************************************** */
-/*                          LOADED RENDER TEXTURES                            */
-/*               (renderer → filled with mlx_xpm_file_to_image)              */
-/* ************************************************************************** */
 
 typedef struct s_textures
 {
@@ -149,11 +131,6 @@ typedef struct s_textures
 	int		floor;		// RGB converted to int
 	int		ceiling;
 }	t_textures;
-
-/* ************************************************************************** */
-/*                                   COLOR                                    */
-/*                                    (RGB)                                   */
-/* ************************************************************************** */
 
 typedef struct s_color
 {
@@ -170,10 +147,6 @@ typedef struct s_counter
 	int			map_line_index;
 }				t_counter;
 
-/* ************************************************************************** */
-/*                                  MAP DATA                                  */
-/* ************************************************************************** */
-
 typedef struct s_map
 {
 	char	**grid;
@@ -181,10 +154,6 @@ typedef struct s_map
 	int		height;
 }	t_map;
 
-/* ************************************************************************** */
-/*                              PLAYER (FINAL)                                */
-/*               (merged parser + renderer → raycasting ready)                */
-/* ************************************************************************** */
 
 typedef struct s_player
 {
@@ -199,10 +168,6 @@ typedef struct s_player
 	t_point	pixel;      // minimap pixel position
 }	t_player;
 
-/* ************************************************************************** */
-/*                                KEY STATES                                  */
-/* ************************************************************************** */
-
 typedef struct s_keys
 {
 	int	move_forward;
@@ -213,10 +178,6 @@ typedef struct s_keys
 	int	rotate_right;
 	int	pause;
 }	t_keys;
-
-/* ************************************************************************** */
-/*                           WALL HIT (RAY RESULT)                            */
-/* ************************************************************************** */
 
 typedef struct s_wall
 {
@@ -232,10 +193,6 @@ typedef struct s_wall
 	int		tex_x;
 	int		tex_y;
 }	t_wall;
-
-/* ************************************************************************** */
-/*                                 RAY DATA                                   */
-/* ************************************************************************** */
 
 typedef struct s_ray
 {
@@ -255,45 +212,40 @@ typedef struct s_ray
 	t_wall	wall;
 }	t_ray;
 
-/* ************************************************************************** */
-/*                                  GAME                                      */
-/*               (FINAL MASTER STRUCT — parser + renderer)                    */
-/* ************************************************************************** */
-
 typedef struct s_game
 {
-	/* MLX */
+	// MLX 
 	void		*mlx;
 	void		*window;
 	t_img		img;
 
-	/* Textures */
+	// Textures
 	t_tex_path	tex_path;	// From parser
 	t_textures	textures;	// Loaded images from renderer
 
-	/* Map + Player */
+	// Map + Player
 	t_map		map;
 	t_player	player;
 
-	/* Colors */
+	// Colors 
 	t_color		floor_color;
 	t_color		ceiling_color;
 
-	/* Input */
+	// Input 
 	t_keys		key_states;
 
-	/* Raycasting / Render Settings */
+	// Raycasting Render Settings 
 	double		fov;
 	int			tile_size;
 	double		camera_x[WIDTH];
 	double		dist_to_camera_plane;
 	t_ray		rays[WIDTH];
 
-	/* Timing */
+	// Timing 
 	uint64_t	last_frame_time;
 	double		dt;
 
-	/* Mouse */
+	// Mouse 
 	int			mouse_x;
 	int			mouse_y;
 
