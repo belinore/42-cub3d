@@ -54,6 +54,8 @@ void	destroy_display_and_exit(t_game *g, char *msg)
 		perror(msg);
 		exit (1);
 	}
+	destroy_textures(g);
+	free_map(g);
 	printf("Exiting...\n");
 	exit (0);
 }
