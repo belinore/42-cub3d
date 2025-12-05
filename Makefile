@@ -1,6 +1,6 @@
 NAME = cub3d
 
-SRCS = src/main.c src/map.c \
+SRCS = src/main.c \
        parsing/start_parsing.c parsing/map_utils.c parsing/read_process_line.c \
 	   parsing/parsing_map.c parsing/parsing_player.c \
 	   parsing/parsing_textures.c parsing/parse_single_line.c parsing/parsing_handler.c \

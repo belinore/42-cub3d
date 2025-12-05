@@ -11,7 +11,7 @@
 # include <unistd.h>
 
 // Holds the 2D map (like rows of the map), size info also inside (width,
-	height)
+//	height)
 typedef struct s_map
 {
 	char		**grid;
