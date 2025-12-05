@@ -10,6 +10,14 @@ void	destroy_textures(t_game *game)
 		free(game->tex_path.east_path);
 	if (game->tex_path.west_path)
 		free(game->tex_path.west_path);
+	if (game->textures.north.img_ptr)
+		mlx_destroy_image(game->mlx, game->textures.north.img_ptr);
+	if (game->textures.south.img_ptr)
+		mlx_destroy_image(game->mlx, game->textures.south.img_ptr);
+	if (game->textures.east.img_ptr)
+		mlx_destroy_image(game->mlx, game->textures.east.img_ptr);
+	if (game->textures.south.img_ptr)
+		mlx_destroy_image(game->mlx, game->textures.west.img_ptr);
 }
 
 void	free_split(char **arr)

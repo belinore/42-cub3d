@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:03:53 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:09:34 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:56:42 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,10 @@ MacOs:
 
 void	destroy_display_and_exit(t_game *g, char *msg)
 {
+	free_map(g);
+	destroy_textures(g);
 	if (g->img.img_ptr)
 		mlx_destroy_image(g->mlx, g->img.img_ptr);
-	if (g->textures.north.img_ptr)
-		mlx_destroy_image(g->mlx, g->textures.north.img_ptr);
-	if (g->textures.south.img_ptr)
-		mlx_destroy_image(g->mlx, g->textures.south.img_ptr);
-	if (g->textures.east.img_ptr)
-		mlx_destroy_image(g->mlx, g->textures.east.img_ptr);
-	if (g->textures.south.img_ptr)
-		mlx_destroy_image(g->mlx, g->textures.west.img_ptr);
 	if (g->window)
 		mlx_destroy_window(g->mlx, g->window);
 	if (g->mlx)
@@ -54,30 +48,36 @@ void	destroy_display_and_exit(t_game *g, char *msg)
 		perror(msg);
 		exit (1);
 	}
-	destroy_textures(g);
-	free_map(g);
 	printf("Exiting...\n");
 	exit (0);
 }
 
-void	initialize_game(t_game *game)
+void	init_game(t_game *game)
 {
-	ft_memset(game, 0, sizeof(t_game));
+	ft_memset(game, 0, sizeof(t_game));//not needed for a static var
 	game->floor_color = (t_color){50, 50, 50};
 	game->ceiling_color = (t_color){135, 206, 235};
+	game->mouse_x = WIDTH / 2;
+	game->mouse_y = HEIGHT / 2;
+	game->fov = PI / 3;
+	game->tile_size = (int)(HEIGHT * 0.04);
 }
 
 int	main(int argc, char **argv)
 {
 	static t_game	game;
+
 	if (argc != 2)
 	{
 		return (ft_error("map.cub file is missing"), 1);
 	}
-	initialize_game(&game);
+	init_game(&game);
 	if (start_parsing(&game, argv) != 0)
 		return (1);
 	init_mlx(&game);
-	init_game(&game);
+	init_textures(&game);
+	init_player(&game);
+	init_camera(&game);
+	init_hooks(&game);
 	mlx_loop(game.mlx);
 }

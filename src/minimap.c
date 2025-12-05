@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:58:56 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:18:53 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:29:50 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,28 +59,23 @@ void	draw_player(t_game *g)
 
 void	draw_minimap_tile(t_game *g, t_point *pixel, int i, int j)
 {
-	if ((g->map.grid[i][j] == '1' && i == 0)
-		|| (g->map.grid[i][j] == '1' && g->map.grid[i - 1][j] == ' '))
-		draw_scaled_texture_tile(&g->img, &g->textures.north,
-			pixel, g->tile_size);
-	else if ((g->map.grid[i][j] == '1' && i == g->map.height - 1)
-		|| (g->map.grid[i][j] == '1' && g->map.grid[i + 1][j] == ' '))
-		draw_scaled_texture_tile(&g->img, &g->textures.south,
-			pixel, g->tile_size);
-	else if ((g->map.grid[i][j] == '1' && j == 0)
-		|| (g->map.grid[i][j] == '1' && g->map.grid[i][j - 1] == ' '))
-		draw_scaled_texture_tile(&g->img, &g->textures.west,
-			pixel, g->tile_size);
-	else if ((g->map.grid[i][j] == '1' && j == g->map.width - 1)
-		|| (g->map.grid[i][j] == '1' && g->map.grid[i][j + 1] == ' '))
-		draw_scaled_texture_tile(&g->img, &g->textures.east,
-			pixel, g->tile_size);
-	else if (g->map.grid[i][j] == '1')
+	if (g->map.grid[i][j] == '1')
 		draw_tile(g, *pixel, BLACK);
 	else if (g->map.grid[i][j] == ' ')
-		draw_tile(g, *pixel, WHITE);
+		draw_tile(g, *pixel, DARK_GREY);
 	else
-		draw_tile(g, *pixel, LIGHT_GREY);
+		draw_tile(g, *pixel, WHITE);
+	pixel->x += g->tile_size;
+	if (g->map.grid[i][j + 1] || pixel->x >= WIDTH)
+		return ;
+	while (j < g->map.width)
+	{
+		draw_tile(g, *pixel, DARK_GREY);
+		pixel->x += g->tile_size;
+		if (pixel->x >= WIDTH)
+			return ;
+		j++;
+	}
 }
 
 void	draw_minimap(t_game *g)
@@ -95,10 +90,9 @@ void	draw_minimap(t_game *g)
 	{
 		j = 0;
 		pixel.x = 0;
-		while (j < g->map.width)
+		while (g->map.grid[i][j])
 		{
 			draw_minimap_tile(g, &pixel, i, j);
-			pixel.x += g->tile_size;
 			if (pixel.x >= WIDTH)
 				break ;
 			j++;

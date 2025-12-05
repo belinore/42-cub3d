@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:53:54 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:06:28 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:39:39 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,16 @@ void	load_texture_to_buffer(t_game *g, t_img *img, char *path)
 			&img->line_length, &img->endian);
 }
 
-//test textures - to be replaced with parsed textures from file
-//south_path = "textures/purple_stone.xpm"; -> higher res example
 void	init_textures(t_game *g)
 {
-	// north_path = "textures/wolfenstein/eagle.xpm";
-	// south_path = "textures/wolfenstein/blue_stone.xpm";
-	// east_path = "textures/wolfenstein/red_brick.xpm";
-	// west_path = "textures/wolfenstein/grey_stone.xpm";
-	// load_texture_to_buffer(g, &g->textures.north, north_path);
-	// load_texture_to_buffer(g, &g->textures.south, south_path);
-	// load_texture_to_buffer(g, &g->textures.east, east_path);
-	// load_texture_to_buffer(g, &g->textures.west, west_path);
 	load_texture_to_buffer(g, &g->textures.north, g->tex_path.north_path);
 	load_texture_to_buffer(g, &g->textures.south, g->tex_path.south_path);
-	load_texture_to_buffer(g, &g->textures.east,  g->tex_path.east_path);
-	load_texture_to_buffer(g, &g->textures.west,  g->tex_path.west_path);
-
-	// g->textures.floor = DARK_BLUE;
-	// g->textures.ceiling = BLUE_GREY;
-
+	load_texture_to_buffer(g, &g->textures.east, g->tex_path.east_path);
+	load_texture_to_buffer(g, &g->textures.west, g->tex_path.west_path);
 	g->textures.floor = (g->floor_color.red << 16)
-                  | (g->floor_color.green << 8)
-                  | (g->floor_color.blue);
-
+		| (g->floor_color.green << 8) | (g->floor_color.blue);
 	g->textures.ceiling = (g->ceiling_color.red << 16)
-                    | (g->ceiling_color.green << 8)
-                    | (g->ceiling_color.blue);
+		| (g->ceiling_color.green << 8) | (g->ceiling_color.blue);
 }
 
 void	init_hooks(t_game *g)

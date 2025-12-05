@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:30:44 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:49:44 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,7 @@ typedef struct s_game
 
 //main.c
 void		destroy_display_and_exit(t_game *g, char *msg);
+void		init_game(t_game *game);
 
 //init_mlx.c
 void		load_texture_to_buffer(t_game *g, t_img *img, char *path);
@@ -264,7 +265,6 @@ void		init_mlx(t_game *g);
 void		init_camera(t_game *g);
 void		set_player_direction(t_game *g, char direction);
 void		init_player(t_game *g);
-void		init_game(t_game *g);
 
 //events.c
 int			close_window(t_game *g);
@@ -321,7 +321,6 @@ void		draw_scaled_texture_tile(t_img *img, t_img *tex_img,
 
 
 //parser
-void			initialize_game(t_game *game);
 int				start_parsing(t_game *game, char **argv);
 int				handle_line(t_game *game, char *line, t_counter *counter);
 int				is_valid_cub_file(char **argv);

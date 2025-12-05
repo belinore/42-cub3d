@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:53:14 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:07:45 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:49:36 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ void	init_player(t_game *g)
 	int	x;
 
 	y = 0;
-	while (y < g->map.height)
+	while (g->map.grid[y])
 	{
 		x = 0;
-		while (x < g->map.width)
+		while (g->map.grid[y][x])
 		{
 			if (g->map.grid[y][x] == 'N' || g->map.grid[y][x] == 'S'
 				|| g->map.grid[y][x] == 'E' || g->map.grid[y][x] == 'W')
@@ -80,26 +80,4 @@ void	init_player(t_game *g)
 		}
 		y++;
 	}
-}
-
-//map data is temp to be replaced with parsed map from file
-//fov initialised to 60 degrees
-void	init_game(t_game *g)
-{
-	// g->map.height = 8;
-	// g->map.width = 10;
-	// g->mouse_x = WIDTH / 2;
-	// g->mouse_y = HEIGHT / 2;
-	// g->fov = PI / 3;
-	// g->tile_size = (int)(HEIGHT * 0.04);
-
-	g->mouse_x = WIDTH / 2;
-    g->mouse_y = HEIGHT / 2;
-    g->fov = PI / 3;
-    g->tile_size = (int)(HEIGHT * 0.04);
-
-	init_textures(g);
-	init_player(g);
-	init_camera(g);
-	init_hooks(g);
 }
