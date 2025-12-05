@@ -44,7 +44,7 @@ static char	**resize_map_grid(char **old_grid, int needed)
 	char	**new_grid;
 	int		i;
 
-	new_grid = ft_calloc(sizeof(char *), needed);
+	new_grid = ft_calloc(needed, sizeof(char *));
 	if (!new_grid)
 	{
 		ft_error("Error: Memory allocation failed for map grid");
