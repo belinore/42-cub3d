@@ -11,23 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3d.h"
-/*
-To toggle between running in macOS and Linux
-
-Linux:
-1) check header cub3d.h to ensure Linux keycodes are uncommented 
-	and Macos keycodes are commented
-2) ensure mlx_loop_end and mlx_destroy_display are uncommented 
-	in below function destroy_display_and_exit
-MacOs:
-1) check header cub3d.h to ensure Linux keycodes are uncommented 
-	and Macos keycodes are commented
-2) ensure mlx_loop_end and mlx_destroy_display are commented 
-	in below function destroy_display_and_exit
-
-3) ./configure in relevant mlx folder
-4) Make as normal
-*/
 
 void	destroy_display_and_exit(t_game *g, char *msg)
 {
@@ -54,7 +37,6 @@ void	destroy_display_and_exit(t_game *g, char *msg)
 
 void	init_game(t_game *game)
 {
-	ft_memset(game, 0, sizeof(t_game));//not needed for a static var
 	game->floor_color = (t_color){50, 50, 50};
 	game->ceiling_color = (t_color){135, 206, 235};
 	game->mouse_x = WIDTH / 2;

@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_handler.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:11:58 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:11:58 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// This function reads texture path lines like NO, SO, WE, EA.
-// It checks if user already gave 4 textures. More than 4 is not allowed.
-// If line is correct, it saves texture path and increases texture count.
 int	handle_texture_line(t_game *game, char *line, t_counter *counter)
 {
 	if (counter->texture_count == 4)
@@ -22,9 +31,6 @@ void	free_rgb_textures(t_game *game, char *rgb_str)
 	destroy_textures(game);
 }
 
-// This function reads color lines (F for floor, C for ceiling/sky).
-// It checks if 2 colors are already saved. More than 2 is not allowed.
-// If line is correct, it saves color and increases color count.
 int	handle_color_line(t_game *game, char *line, t_counter *counter)
 {
 	if (counter->color_count == 2)
@@ -38,9 +44,6 @@ int	handle_color_line(t_game *game, char *line, t_counter *counter)
 	return (0);
 }
 
-// This function reads map design line by line.
-// When first map line comes, it marks map as started.
-// It adds every line to map storage. If any line add fails, stop safely.
 int	handle_map_line(t_game *game, char *line, t_counter *counter)
 {
 	if (!counter->map_started)

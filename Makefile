@@ -1,6 +1,5 @@
 NAME = cub3d
 HDR = cub3d.h
-
 SRC = src/main.c \
       src/draw_utils.c src/init_mlx.c \
       src/init_game.c src/raycasting.c \
@@ -12,12 +11,10 @@ SRC = src/main.c \
       utils/clean_utils.c
 
 OBJS := $(SRC:%.c=obj/%.o)
-
 CC = cc
 LIBFT = includes/libft
 CFLAGS = -Wall -Wextra -Werror -g -O2 -Iincludes -I$(LIBFT)
 
-# OS-specific flags
 ifeq ($(shell uname), Darwin)
     LFLAGS = -L./minilibx_macos -lmlx -framework OpenGL -framework Appkit
 else
@@ -27,25 +24,25 @@ endif
 all: libft.a $(NAME)
 
 $(NAME): $(OBJS) libft.a
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT) -lft -o $(NAME) $(LFLAGS)
-    
-# Generic rule to build object files
+	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT) -lft -o $(NAME) $(LFLAGS)
+	@echo "\n\033[1;38;2;50;255;50mCub3D Compiled Successfully! 🎮🚀\033[0m\n"
+
 obj/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 libft.a:
-	@make -C $(LIBFT)
-
+	@make -C $(LIBFT) --no-print-directory
 
 clean:
-	rm -rf obj
-	@make -C $(LIBFT) clean
+	@rm -rf obj
+	@make -C $(LIBFT) clean --no-print-directory
 
 fclean: clean
-	rm -f $(NAME)
-	@make -C $(LIBFT) fclean
-
+	@rm -f $(NAME)
+	@make -C $(LIBFT) fclean --no-print-directory
+	@echo "\n\033[1;38;2;255;50;50mDeleting EVERYTHING! 🚮🚮🚮\033[0m\n"
+    
 re: fclean all
 
 .PHONY: all clean fclean re libft.a
