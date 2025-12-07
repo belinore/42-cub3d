@@ -32,18 +32,6 @@ void	destroy_textures(t_game *game)
 		mlx_destroy_image(game->mlx, game->textures.west.img_ptr);
 }
 
-void	free_split(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-}
-
 void	free_map(t_game *game)
 {
 	int	i;

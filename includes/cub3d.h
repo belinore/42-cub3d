@@ -285,7 +285,6 @@ int				append_map_line(t_game *game, char *line, int line_index);
 int				parse_texture_line(t_game *game, char *line);
 int				ft_error(char *message);
 void			destroy_textures(t_game *game);
-void			free_split(char **arr);
 void			*gnl_free(void *str);
 void			free_map(t_game *game);
 void			free_rgb_textures(t_game *game, char *rgb_str);

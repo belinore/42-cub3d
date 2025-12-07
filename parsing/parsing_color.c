@@ -63,11 +63,11 @@ static int	parse_rgb_values(char *rgb_str, t_color *color)
 		count++;
 	if (count != 3)
 	{
-		free_split(rgb_parts);
+		free_string(rgb_parts);
 		return (ft_error("Error: RGB format must be R,G,B only 3 values"));
 	}
 	result = validate_convert_rgb(rgb_parts, color);
-	free_split(rgb_parts);
+	free_string(rgb_parts);
 	return (result);
 }
 

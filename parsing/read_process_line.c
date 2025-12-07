@@ -29,9 +29,7 @@ int	handle_line(t_game *game, char *line, t_counter *counter)
 		return (1);
 	}
 	if (parse_single_line(game, line, counter) != 0)
-	{
 		return (-1);
-	}
 	return (0);
 }
 

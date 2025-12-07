@@ -76,7 +76,10 @@ int	check_valid_chars(t_game *game)
 			c = game->map.grid[i][j];
 			if (c != '0' && c != '1' && c != ' ' && c != 'N' && c != 'S'
 				&& c != 'E' && c != 'W')
+			{
+				destroy_textures(game);
 				return (ft_error("Error: Invalid character in map"));
+			}
 			j++;
 		}
 		i++;

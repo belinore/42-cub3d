@@ -12,6 +12,35 @@
 
 #include "cub3d.h"
 
+static int	invalid_map_line(char *line, int len)
+{
+	int	i;
+	int	first;
+	int	last;
+	int	count;
+
+	i = 0;
+	first = -1;
+	last = -1;
+	count = 0;
+	while (i < len)
+	{
+		if (line[i] != ' ' && line[i] != '\n')
+		{
+			if (first == -1)
+				first = i;
+			last = i;
+			count++;
+		}
+		i++;
+	}
+	if (count == 0 || count == 1)
+		return (1);
+	if (line[first] != '1' || line[last] != '1')
+		return (1);
+	return (0);
+}
+
 int	handle_texture_line(t_game *game, char *line, t_counter *counter)
 {
 	if (counter->texture_count == 4)
@@ -46,6 +75,14 @@ int	handle_color_line(t_game *game, char *line, t_counter *counter)
 
 int	handle_map_line(t_game *game, char *line, t_counter *counter)
 {
+	int	len;
+
+	len = ft_strlen(line);
+	if (counter->map_started && invalid_map_line(line, len))
+	{
+		destroy_textures(game);
+		return (ft_error("Error: found empty line or map not closed"));
+	}
 	if (!counter->map_started)
 		counter->map_started = 1;
 	if (append_map_line(game, line, counter->map_line_index) != 0)
