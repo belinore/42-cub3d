@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 18:35:23 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 20:12:52 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,32 +52,34 @@
 # define BLUE_GREY 0x7393B3
 
 //KEYCODES LINUX
-// # define ESC 65307
-// # define W_KEY 119
-// # define A_KEY 97
-// # define S_KEY 115
-// # define D_KEY 100
-// # define LEFT_ARROW 65361
-// # define RIGHT_ARROW 65363
-// # define UP_ARROW 65362
-// # define DOWN_ARROW 65364
-// # define P_KEY 112
-// # define ENTER_KEY 65293
-// # define BACKSPACE 65288
+# define ESC 65307
+# define W_KEY 119
+# define A_KEY 97
+# define S_KEY 115
+# define D_KEY 100
+# define LEFT_ARROW 65361
+# define RIGHT_ARROW 65363
+# define UP_ARROW 65362
+# define DOWN_ARROW 65364
+# define P_KEY 112
+# define ENTER_KEY 65293
+# define BACKSPACE 65288
+# define M_KEY 109
 
-// KEYCODES MACOS
-# define ESC 53
-# define W_KEY 13
-# define A_KEY 0
-# define S_KEY 1
-# define D_KEY 2
-# define LEFT_ARROW 123
-# define RIGHT_ARROW 124
-# define UP_ARROW 126
-# define DOWN_ARROW 125
-# define P_KEY 35
-# define ENTER_KEY 36
-# define BACKSPACE 51
+// // KEYCODES MACOS
+// # define ESC 53
+// # define W_KEY 13
+// # define A_KEY 0
+// # define S_KEY 1
+// # define D_KEY 2
+// # define LEFT_ARROW 123
+// # define RIGHT_ARROW 124
+// # define UP_ARROW 126
+// # define DOWN_ARROW 125
+// # define P_KEY 35
+// # define ENTER_KEY 36
+// # define BACKSPACE 51
+// # define M_KEY 46
 
 enum
 {
@@ -90,7 +92,7 @@ enum
 	ON_DESTROY = 17
 };
 
-enum
+enum e_mode
 {
 	NO_MAP = 0,
 	PARTIAL_MAP = 1,
@@ -162,7 +164,7 @@ typedef struct s_map
 
 typedef struct s_minimap
 {
-	int			mode; //0: no map, 1: partial, 2: full map
+	enum e_mode	mode;
 	int			tile_size;
 	int			width_map;
 	int			height_map;
@@ -182,7 +184,6 @@ typedef struct s_player
 	double		dir_y;
 	double		plane_x;
 	double		plane_y;
-	t_point		pixel;
 }				t_player;
 
 typedef struct s_keys
@@ -303,13 +304,16 @@ void		draw_wall_slice(t_game *g, t_wall *wall);
 void		calc_wall_height_and_texture(t_game *g, t_ray *ray, int column);
 
 //minimap.c
-void		draw_ray_minimap(t_game *g, t_point p0, t_point p1, int color);
-void		raycasting_minimap(t_game *g);
-void		draw_player(t_game *g);
 void		draw_minimap_tile(t_game *g, t_point *pixel, int i, int j);
 void		draw_full_map(t_game *g);
 void		draw_minimap_view(t_game *g);
 void		draw_minimap(t_game *g);
+
+//minimap2.c
+void		update_minimap_mode(t_game *g);
+void		draw_ray_minimap(t_game *g, t_point p0, t_point p1, int color);
+void		raycasting_minimap(t_game *g);
+void		draw_player(t_game *g);
 
 //utils.c
 uint64_t	get_time_in_ms(void);
@@ -327,28 +331,28 @@ void		draw_scaled_texture_tile(t_game *g, t_img *tex_img,
 				t_point *start_pixel);
 
 //parser
-int				start_parsing(t_game *game, char **argv);
-int				handle_line(t_game *game, char *line, t_counter *counter);
-int				is_valid_cub_file(char **argv);
-int				validate_map(t_game *game);
-int				load_cub_file(t_game *game, const char *path);
-int				read_cub_lines(t_game *game, int fd, t_counter *counter);
-int				parse_single_line(t_game *game, char *line, t_counter *counter);
-int				validate_parsing_completion(t_game *game, t_counter *counter);
-int				check_valid_chars(t_game *game);
-int				check_map_closed(t_game *game);
-int				validate_and_store_player(t_game *game);
-int				parse_color_line(t_game *game, char *line);
-int				handle_map_line(t_game *game, char *line, t_counter *counter);
-int				handle_color_line(t_game *game, char *line, t_counter *counter);
-int				handle_texture_line(t_game *game, char *line,
-					t_counter *counter);
-int				append_map_line(t_game *game, char *line, int line_index);
-int				parse_texture_line(t_game *game, char *line);
-int				ft_error(char *message);
-void			destroy_textures(t_game *game);
-void			*gnl_free(void *str);
-void			free_map(t_game *game);
-void			free_rgb_textures(t_game *game, char *rgb_str);
+int			start_parsing(t_game *game, char **argv);
+int			handle_line(t_game *game, char *line, t_counter *counter);
+int			is_valid_cub_file(char **argv);
+int			validate_map(t_game *game);
+int			load_cub_file(t_game *game, const char *path);
+int			read_cub_lines(t_game *game, int fd, t_counter *counter);
+int			parse_single_line(t_game *game, char *line, t_counter *counter);
+int			validate_parsing_completion(t_game *game, t_counter *counter);
+int			check_valid_chars(t_game *game);
+int			check_map_closed(t_game *game);
+int			validate_and_store_player(t_game *game);
+int			parse_color_line(t_game *game, char *line);
+int			handle_map_line(t_game *game, char *line, t_counter *counter);
+int			handle_color_line(t_game *game, char *line, t_counter *counter);
+int			handle_texture_line(t_game *game, char *line,
+				t_counter *counter);
+int			append_map_line(t_game *game, char *line, int line_index);
+int			parse_texture_line(t_game *game, char *line);
+int			ft_error(char *message);
+void		destroy_textures(t_game *game);
+void		*gnl_free(void *str);
+void		free_map(t_game *game);
+void		free_rgb_textures(t_game *game, char *rgb_str);
 
 #endif

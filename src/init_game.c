@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:53:14 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 17:13:57 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 20:08:19 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_camera(t_game *g)
 	}
 }
 
-//defines minimap default size; adjusts if map is smaller; 
+//defines minimap default size and adjusts if map/screen size is smaller
 void	init_minimap(t_game *g)
 {
 	g->minimap.width_map = 9;
@@ -42,13 +42,12 @@ void	init_minimap(t_game *g)
 	g->minimap.height_pix = g->minimap.height_map * g->minimap.tile_size;
 	if (g->minimap.width_pix >= WIDTH)
 	{
-		g->minimap.width_map = (int)WIDTH / g->minimap.tile_size;
+		g->minimap.width_map = (int)WIDTH / g->minimap.tile_size + 1;
 		g->minimap.width_pix = WIDTH;
 	}
-		
 	if (g->minimap.height_pix >= HEIGHT)
 	{
-		g->minimap.height_map = (int)HEIGHT / g->minimap.tile_size;
+		g->minimap.height_map = (int)HEIGHT / g->minimap.tile_size + 1;
 		g->minimap.height_pix = HEIGHT;
 	}
 }
@@ -95,8 +94,6 @@ void	init_player(t_game *g)
 				g->player.map_y = y;
 				g->player.pos_x = x + 0.5;
 				g->player.pos_y = y + 0.5;
-				g->player.pixel.x = (int)(g->player.pos_x * g->minimap.tile_size);
-				g->player.pixel.y = (int)(g->player.pos_y * g->minimap.tile_size);
 				set_player_direction(g, g->map.grid[y][x]);
 				return ;
 			}

@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:42:48 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 19:11:28 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 19:38:48 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	key_handler(int keycode, t_game *g)
 		g->fov -= 5 * PI / 180;
 		init_camera(g);
 	}
+	else if (keycode == M_KEY)
+		update_minimap_mode(g);
 	else if (keycode == ESC)
 		destroy_display_and_exit(g, NULL);
 	else

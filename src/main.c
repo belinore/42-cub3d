@@ -6,11 +6,29 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:03:53 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 17:19:21 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 20:12:15 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/*
+	To toggle between running in macOS and Linux
+
+	Linux:
+	1) check header cub3d.h to ensure Linux keycodes are uncommented 
+		and Macos keycodes are commented
+	2) ensure mlx_loop_end and mlx_destroy_display are uncommented 
+		in below function destroy_display_and_exit
+	MacOs:
+	1) check header cub3d.h to ensure Linux keycodes are uncommented 
+		and Macos keycodes are commented
+	2) ensure mlx_loop_end and mlx_destroy_display are commented 
+		in below function destroy_display_and_exit
+
+	3) ./configure in relevant mlx folder
+	4) Make as normal
+*/
 
 void	destroy_display_and_exit(t_game *g, char *msg)
 {
@@ -22,8 +40,8 @@ void	destroy_display_and_exit(t_game *g, char *msg)
 		mlx_destroy_window(g->mlx, g->window);
 	if (g->mlx)
 	{
-		// mlx_loop_end(g->mlx);
-		// mlx_destroy_display(g->mlx);
+		mlx_loop_end(g->mlx);
+		mlx_destroy_display(g->mlx);
 		free(g->mlx);
 	}
 	if (msg)
@@ -60,7 +78,6 @@ int	main(int argc, char **argv)
 	init_textures(&game);
 	init_player(&game);
 	init_camera(&game);
-	init_minimap(&game);
 	init_hooks(&game);
 	mlx_loop(game.mlx);
 }

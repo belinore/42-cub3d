@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:05:02 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 17:59:56 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:53:09 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,11 @@ void	move_player(t_game *g, double speed, int keycode)
 	{
 		g->player.pos_x = new.x;
 		g->player.map_x = (int)new.x;
-		g->player.pixel.x = (int)(new.x * g->minimap.tile_size);
 	}
 	if (is_valid_move(g, g->player.pos_x, new.y))
 	{
 		g->player.pos_y = new.y;
 		g->player.map_y = (int)new.y;
-		g->player.pixel.y = (int)(new.y * g->minimap.tile_size);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:40:55 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 18:03:34 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 19:10:36 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,12 @@ t_point	get_last_pixel(t_game *g, t_point *start_pixel)
 
 void	draw_tile(t_game *g, t_point pixel, int color)
 {
-	t_point end;
-	// int	end_x;
-	// int	end_y;
-	int	start_x;
+	t_point	end;
+	int		start_x;
 
 	if (pixel.x >= g->minimap.width_pix || pixel.y >= g->minimap.height_pix)
 		return ;
 	end = get_last_pixel(g, &pixel);
-	// end_x = pixel.x + g->minimap.tile_size;
-	// end_y = pixel.y + g->minimap.tile_size;
-	// if (end_x > g->minimap.width_pix)
-	// 	end_x = g->minimap.width_pix;
-	// if (end_y > g->minimap.height_pix)
-	// 	end_y = g->minimap.height_pix;
 	start_x = pixel.x;
 	while (pixel.y < end.y)
 	{

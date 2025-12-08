@@ -4,7 +4,7 @@ SRC = src/main.c \
       src/draw_utils.c src/init_mlx.c \
       src/init_game.c src/raycasting.c \
       src/raycasting2.c src/render.c \
-      src/events.c src/movement.c src/minimap.c src/utils.c \
+      src/events.c src/movement.c src/minimap.c src/minimap2.c src/utils.c \
       parsing/start_parsing.c parsing/map_utils.c parsing/read_process_line.c \
       parsing/parsing_map.c parsing/parsing_player.c parsing/parsing_textures.c \
       parsing/parse_single_line.c parsing/parsing_handler.c parsing/parsing_color.c \
