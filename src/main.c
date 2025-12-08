@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:03:53 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:42 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:19:21 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	destroy_display_and_exit(t_game *g, char *msg)
 		mlx_destroy_window(g->mlx, g->window);
 	if (g->mlx)
 	{
-		mlx_loop_end(g->mlx);
-		mlx_destroy_display(g->mlx);
+		// mlx_loop_end(g->mlx);
+		// mlx_destroy_display(g->mlx);
 		free(g->mlx);
 	}
 	if (msg)
@@ -60,7 +60,7 @@ void	init_game(t_game *game)
 	game->mouse_x = WIDTH / 2;
 	game->mouse_y = HEIGHT / 2;
 	game->fov = PI / 3;
-	game->tile_size = (int)(HEIGHT * 0.04);
+	game->minimap.tile_size = (int)(HEIGHT * 0.04);
 }
 
 int	main(int argc, char **argv)
@@ -78,6 +78,7 @@ int	main(int argc, char **argv)
 	init_textures(&game);
 	init_player(&game);
 	init_camera(&game);
+	init_minimap(&game);
 	init_hooks(&game);
 	mlx_loop(game.mlx);
 }

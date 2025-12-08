@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/05 15:49:44 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:12:49 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,32 +53,32 @@
 # define BLUE_GREY 0x7393B3
 
 //KEYCODES LINUX
-# define ESC 65307
-# define W_KEY 119
-# define A_KEY 97
-# define S_KEY 115
-# define D_KEY 100
-# define LEFT_ARROW 65361
-# define RIGHT_ARROW 65363
-# define UP_ARROW 65362
-# define DOWN_ARROW 65364
-# define P_KEY 112
-# define ENTER_KEY 65293
-# define BACKSPACE 65288
+// # define ESC 65307
+// # define W_KEY 119
+// # define A_KEY 97
+// # define S_KEY 115
+// # define D_KEY 100
+// # define LEFT_ARROW 65361
+// # define RIGHT_ARROW 65363
+// # define UP_ARROW 65362
+// # define DOWN_ARROW 65364
+// # define P_KEY 112
+// # define ENTER_KEY 65293
+// # define BACKSPACE 65288
 
-// // KEYCODES MACOS
-// # define ESC 53
-// # define W_KEY 13
-// # define A_KEY 0
-// # define S_KEY 1
-// # define D_KEY 2
-// # define LEFT_ARROW 123
-// # define RIGHT_ARROW 124
-// # define UP_ARROW 126
-// # define DOWN_ARROW 125
-// # define P_KEY 35
-// # define ENTER_KEY 36
-// # define BACKSPACE 51
+// KEYCODES MACOS
+# define ESC 53
+# define W_KEY 13
+# define A_KEY 0
+# define S_KEY 1
+# define D_KEY 2
+# define LEFT_ARROW 123
+# define RIGHT_ARROW 124
+# define UP_ARROW 126
+# define DOWN_ARROW 125
+# define P_KEY 35
+# define ENTER_KEY 36
+# define BACKSPACE 51
 
 enum
 {
@@ -91,10 +91,17 @@ enum
 	ON_DESTROY = 17
 };
 
+enum
+{
+	NO_MAP = 0,
+	PARTIAL_MAP = 1,
+	FULL_MAP = 2
+};
+
 typedef struct s_img
 {
 	void	*img_ptr;
-	char    *pixel_ptr;
+	char	*pixel_ptr;
 	int		bpp;
 	int		line_length;
 	int		endian;
@@ -154,6 +161,17 @@ typedef struct s_map
 	int		height;
 }	t_map;
 
+typedef struct s_minimap
+{
+	int			mode; //0: no map, 1: partial, 2: full map
+	int			tile_size;
+	int			width_map;
+	int			height_map;
+	int			width_pix;
+	int			height_pix;
+	t_point		player_pixel;
+	t_pointf	camera;
+}				t_minimap;
 
 typedef struct s_player
 {
@@ -226,6 +244,7 @@ typedef struct s_game
 	// Map + Player
 	t_map		map;
 	t_player	player;
+	t_minimap	minimap;
 
 	// Colors 
 	t_color		floor_color;
@@ -236,7 +255,6 @@ typedef struct s_game
 
 	// Raycasting Render Settings 
 	double		fov;
-	int			tile_size;
 	double		camera_x[WIDTH];
 	double		dist_to_camera_plane;
 	t_ray		rays[WIDTH];
@@ -263,6 +281,7 @@ void		init_mlx(t_game *g);
 
 //init_game.c
 void		init_camera(t_game *g);
+void		init_minimap(t_game *g);
 void		set_player_direction(t_game *g, char direction);
 void		init_player(t_game *g);
 
@@ -300,9 +319,12 @@ void		draw_wall_slice(t_game *g, t_wall *wall);
 void		calc_wall_height_and_texture(t_game *g, t_ray *ray, int column);
 
 //minimap.c
+void		draw_ray_minimap(t_game *g, t_point p0, t_point p1, int color);
 void		raycasting_minimap(t_game *g);
 void		draw_player(t_game *g);
 void		draw_minimap_tile(t_game *g, t_point *pixel, int i, int j);
+void		draw_full_map(t_game *g);
+void		draw_minimap_view(t_game *g);
 void		draw_minimap(t_game *g);
 
 //utils.c
@@ -315,10 +337,10 @@ double		scale_pixel(int unscaled_num, double new_min, double new_max,
 //draw_utils.c
 void		draw_line(t_img *img, t_point p0, t_point p1, int color);
 void		draw_circle(t_img *img, t_point center, int radius, int color);
-void		draw_tile(t_game *game, t_point pixel, int color);
-void		draw_scaled_texture_tile(t_img *img, t_img *tex_img,
-				t_point *start_pixel, int size);
-
+t_point		get_last_pixel(t_game *g, t_point *start_pixel);
+void		draw_tile(t_game *g, t_point pixel, int color);
+void		draw_scaled_texture_tile(t_game *g, t_img *tex_img,
+				t_point *start_pixel);
 
 //parser
 int				start_parsing(t_game *game, char **argv);

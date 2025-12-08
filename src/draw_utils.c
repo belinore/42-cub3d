@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:40:55 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/03 17:36:58 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:03:34 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,52 +63,74 @@ void	draw_circle(t_img *img, t_point center, int radius, int color)
 	}
 }
 
-void	draw_tile(t_game *game, t_point pixel, int color)
+t_point	get_last_pixel(t_game *g, t_point *start_pixel)
 {
-	int	end_x;
-	int	end_y;
+	t_point	end;
+
+	end.x = start_pixel->x + g->minimap.tile_size;
+	end.y = start_pixel->y + g->minimap.tile_size;
+	if (end.x > g->minimap.width_pix)
+		end.x = g->minimap.width_pix;
+	if (end.y > g->minimap.height_pix)
+		end.y = g->minimap.height_pix;
+	return (end);
+}
+
+void	draw_tile(t_game *g, t_point pixel, int color)
+{
+	t_point end;
+	// int	end_x;
+	// int	end_y;
 	int	start_x;
 
-	end_x = pixel.x + game->tile_size;
-	end_y = pixel.y + game->tile_size;
-	if (end_x > WIDTH)
-		end_x = WIDTH;
-	if (end_y > HEIGHT)
-		end_y = HEIGHT;
+	if (pixel.x >= g->minimap.width_pix || pixel.y >= g->minimap.height_pix)
+		return ;
+	end = get_last_pixel(g, &pixel);
+	// end_x = pixel.x + g->minimap.tile_size;
+	// end_y = pixel.y + g->minimap.tile_size;
+	// if (end_x > g->minimap.width_pix)
+	// 	end_x = g->minimap.width_pix;
+	// if (end_y > g->minimap.height_pix)
+	// 	end_y = g->minimap.height_pix;
 	start_x = pixel.x;
-	while (pixel.y < end_y)
+	while (pixel.y < end.y)
 	{
 		pixel.x = start_x;
-		while (pixel.x < end_x)
+		while (pixel.x < end.x)
 		{
-			put_pixel(&game->img, pixel.x, pixel.y, color);
+			if (pixel.x >= 0 && pixel.x < WIDTH
+				&& pixel.y >= 0 && pixel.y < HEIGHT)
+				put_pixel(&g->img, pixel.x, pixel.y, color);
 			pixel.x++;
 		}
 		pixel.y++;
 	}
 }
 
-void	draw_scaled_texture_tile(t_img *img, t_img *tex_img,
-		t_point *start_pixel, int size)
+void	draw_scaled_texture_tile(t_game *g, t_img *tex_img,
+		t_point *start_pixel)
 {
 	t_point		tex;
 	t_pointf	step;
 	int			i;
 	int			j;
-	int			color;
+	t_point		end_pixel;
 
-	step.x = (float)tex_img->width / size;
-	step.y = (float)tex_img->height / size;
+	step.x = (float)tex_img->width / g->minimap.tile_size;
+	step.y = (float)tex_img->height / g->minimap.tile_size;
+	end_pixel = get_last_pixel(g, start_pixel);
 	i = 0;
-	while (i < size && start_pixel->y + i < HEIGHT)
+	while (start_pixel->y + i < end_pixel.y)
 	{
 		tex.y = (int)(i * step.y);
 		j = 0;
-		while (j < size && start_pixel->x + j < WIDTH)
+		while (start_pixel->x + j < end_pixel.x)
 		{
 			tex.x = (int)(j * step.x);
-			color = get_tex_pixel(tex_img, tex.x, tex.y);
-			put_pixel(img, start_pixel->x + j, start_pixel->y + i, color);
+			if (start_pixel->x + j >= 0 && start_pixel->x + j < WIDTH
+				&& start_pixel->y + i >= 0 && start_pixel->y + i < HEIGHT)
+				put_pixel(&g->img, start_pixel->x + j, start_pixel->y + i,
+					get_tex_pixel(tex_img, tex.x, tex.y));
 			j++;
 		}
 		i++;
