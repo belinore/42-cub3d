@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:00:26 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:00:26 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// This function checks if a map edge is open (not closed by wall).
-// It takes a direction code like "x-1", "x+1", "y-1", "y+1"
-// If code is wrong and neighbor not found → free all texture memory and show error.
 static int	map_not_close(t_game *game, char n, char *c)
 {
 	if (!n)
@@ -20,11 +29,6 @@ static int	map_not_close(t_game *game, char n, char *c)
 	return (0);
 }
 
-// This function checks if the neighbor cell exists inside the map.
-// It makes sure x and y are inside safe map range.
-// It checks grid row is present and x is not bigger than the row length.
-// Return 1 if neighbor exists.
-// Return 0 if outside map or not found.
 static int	is_valid_neighbor(t_game *game, int x, int y)
 {
 	if (y < 0 || y >= game->map.height)
@@ -38,11 +42,6 @@ static int	is_valid_neighbor(t_game *game, int x, int y)
 	return (1);
 }
 
-// This function checks 4 directions around one cell:
-// left, right, top, bottom.
-// It calls is_valid_neighbor() and map_not_close()
-// If any direction is open → return 1 (means map open somewhere)
-// If all safe → return 0 ✅ (means map closed around this cell)
 static int	check_neighbors(t_game *game, int x, int y)
 {
 	char	n;
@@ -62,11 +61,6 @@ static int	check_neighbors(t_game *game, int x, int y)
 	return (0);
 }
 
-// This function scans the whole map and checks all letters are allowed.
-// Allowed letters are:
-// '1' wall, '0' empty, space, N,S,E,W (player start side)
-// If any other letter/symbol found → stop and show error .
-// If all ok → return 0.
 int	check_valid_chars(t_game *game)
 {
 	int		i;
@@ -82,7 +76,10 @@ int	check_valid_chars(t_game *game)
 			c = game->map.grid[i][j];
 			if (c != '0' && c != '1' && c != ' ' && c != 'N' && c != 'S'
 				&& c != 'E' && c != 'W')
+			{
+				destroy_textures(game);
 				return (ft_error("Error: Invalid character in map"));
+			}
 			j++;
 		}
 		i++;
@@ -90,11 +87,6 @@ int	check_valid_chars(t_game *game)
 	return (0);
 }
 
-// This function scans the map to make sure map is fully surrounded by walls.
-// It checks only important cells ('0' or player symbols).
-// For each, it checks neighbors using check_neighbors().
-// If any open spot on map border → give error stop.
-// If full map safe → return 0 .
 int	check_map_closed(t_game *game)
 {
 	int		x;

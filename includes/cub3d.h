@@ -6,28 +6,28 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 18:12:49 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:35:23 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <math.h>
-# include <sys/time.h>
-# include <stdint.h>
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx_macos/mlx.h"
 # include "get_next_line.h"
 # include "libft/libft.h"
 # include <fcntl.h>
+# include <math.h>
+# include <stdint.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
 # include <unistd.h>
 
 # define DEBUG_MODE 1
-# define WIDTH 1280//640
-# define HEIGHT 720//400
+# define WIDTH 1280 // 640
+# define HEIGHT 720 // 400
 
 # define MAX_RAY_LENGTH 1000
 # define ROTATION_SPEED 2
@@ -39,7 +39,6 @@
 # define MS_PER_FRAME 1600
 # define PI 3.14159265358979323846
 
-//COLORS
 # define RED 0xFF0000
 # define DARK_RED 0x800000
 # define WHITE 0xFFFFFF
@@ -100,51 +99,51 @@ enum
 
 typedef struct s_img
 {
-	void	*img_ptr;
-	char	*pixel_ptr;
-	int		bpp;
-	int		line_length;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
+	void		*img_ptr;
+	char		*pixel_ptr;
+	int			bpp;
+	int			line_length;
+	int			endian;
+	int			width;
+	int			height;
+}				t_img;
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
-}	t_point;
+	int			x;
+	int			y;
+}				t_point;
 
 typedef struct s_pointf
 {
-	double	x;
-	double	y;
-}	t_pointf;
+	double		x;
+	double		y;
+}				t_pointf;
 
 typedef struct s_tex_path
 {
-	char	*north_path;
-	char	*south_path;
-	char	*west_path;
-	char	*east_path;
-}	t_tex_path;
+	char		*north_path;
+	char		*south_path;
+	char		*west_path;
+	char		*east_path;
+}				t_tex_path;
 
 typedef struct s_textures
 {
-	t_img	north;
-	t_img	south;
-	t_img	east;
-	t_img	west;
-	int		floor;		// RGB converted to int
-	int		ceiling;
-}	t_textures;
+	t_img		north;
+	t_img		south;
+	t_img		east;
+	t_img		west;
+	int			floor;
+	int			ceiling;
+}				t_textures;
 
 typedef struct s_color
 {
-	int	red;
-	int	green;
-	int	blue;
-}	t_color;
+	int			red;
+	int			green;
+	int			blue;
+}				t_color;
 
 typedef struct s_counter
 {
@@ -156,10 +155,10 @@ typedef struct s_counter
 
 typedef struct s_map
 {
-	char	**grid;
-	int		width;
-	int		height;
-}	t_map;
+	char		**grid;
+	int			width;
+	int			height;
+}				t_map;
 
 typedef struct s_minimap
 {
@@ -175,99 +174,84 @@ typedef struct s_minimap
 
 typedef struct s_player
 {
-	int		map_x;      // current tile
-	int		map_y;
-	double	pos_x;      // precise position (float)
-	double	pos_y;
-	double	dir_x;      // direction vector
-	double	dir_y;
-	double	plane_x;    // camera plane vector
-	double	plane_y;
-	t_point	pixel;      // minimap pixel position
-}	t_player;
+	int			map_x;
+	int			map_y;
+	double		pos_x;
+	double		pos_y;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
+	t_point		pixel;
+}				t_player;
 
 typedef struct s_keys
 {
-	int	move_forward;
-	int	move_backward;
-	int	strafe_left;
-	int	strafe_right;
-	int	rotate_left;
-	int	rotate_right;
-	int	pause;
-}	t_keys;
+	int			move_forward;
+	int			move_backward;
+	int			strafe_left;
+	int			strafe_right;
+	int			rotate_left;
+	int			rotate_right;
+	int			pause;
+}				t_keys;
 
 typedef struct s_wall
 {
-	int		map_tile_x;
-	int		map_tile_y;
-	double	hit_pos_x;;
-	double	hit_pos_y;
-	int		column;
-	int		height;
-	int		top_y;
-	int		bottom_y;
-	t_img	*texture;
-	int		tex_x;
-	int		tex_y;
-}	t_wall;
+	int			map_tile_x;
+	int			map_tile_y;
+	double		hit_pos_x;
+	double		hit_pos_y;
+	int			column;
+	int			height;
+	int			top_y;
+	int			bottom_y;
+	t_img		*texture;
+	int			tex_x;
+	int			tex_y;
+}				t_wall;
 
 typedef struct s_ray
 {
-	double	total_dist_x;
-	double	total_dist_y;
-	double	dir_x;
-	double	dir_y;
-	double	camera_x;
-	double	delta_dist_x;
-	double	delta_dist_y;
-	int		step_x;
-	int		step_y;
-	double	side_dist_x;
-	double	side_dist_y;
-	double	perp_wall_dist;
-	int		hit_side;
-	t_wall	wall;
-}	t_ray;
+	double		total_dist_x;
+	double		total_dist_y;
+	double		dir_x;
+	double		dir_y;
+	double		camera_x;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	int			step_x;
+	int			step_y;
+	double		side_dist_x;
+	double		side_dist_y;
+	double		perp_wall_dist;
+	int			hit_side;
+	t_wall		wall;
+}				t_ray;
 
 typedef struct s_game
 {
-	// MLX 
 	void		*mlx;
 	void		*window;
 	t_img		img;
-
-	// Textures
-	t_tex_path	tex_path;	// From parser
-	t_textures	textures;	// Loaded images from renderer
-
-	// Map + Player
+	t_tex_path	tex_path;
+	t_textures	textures;
 	t_map		map;
 	t_player	player;
 	t_minimap	minimap;
-
-	// Colors 
 	t_color		floor_color;
 	t_color		ceiling_color;
-
-	// Input 
 	t_keys		key_states;
-
-	// Raycasting Render Settings 
 	double		fov;
 	double		camera_x[WIDTH];
 	double		dist_to_camera_plane;
 	t_ray		rays[WIDTH];
-
-	// Timing 
 	uint64_t	last_frame_time;
 	double		dt;
-
-	// Mouse 
 	int			mouse_x;
 	int			mouse_y;
 
-}	t_game;
+}				t_game;
 
 //main.c
 void		destroy_display_and_exit(t_game *g, char *msg);
@@ -347,29 +331,22 @@ int				start_parsing(t_game *game, char **argv);
 int				handle_line(t_game *game, char *line, t_counter *counter);
 int				is_valid_cub_file(char **argv);
 int				validate_map(t_game *game);
-
 int				load_cub_file(t_game *game, const char *path);
 int				read_cub_lines(t_game *game, int fd, t_counter *counter);
 int				parse_single_line(t_game *game, char *line, t_counter *counter);
 int				validate_parsing_completion(t_game *game, t_counter *counter);
 int				check_valid_chars(t_game *game);
-
 int				check_map_closed(t_game *game);
 int				validate_and_store_player(t_game *game);
-
 int				parse_color_line(t_game *game, char *line);
-
 int				handle_map_line(t_game *game, char *line, t_counter *counter);
 int				handle_color_line(t_game *game, char *line, t_counter *counter);
 int				handle_texture_line(t_game *game, char *line,
 					t_counter *counter);
-
 int				append_map_line(t_game *game, char *line, int line_index);
 int				parse_texture_line(t_game *game, char *line);
-
 int				ft_error(char *message);
 void			destroy_textures(t_game *game);
-void			free_split(char **arr);
 void			*gnl_free(void *str);
 void			free_map(t_game *game);
 void			free_rgb_textures(t_game *game, char *rgb_str);

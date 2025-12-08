@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_textures.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:14:34 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:14:34 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// This function takes a texture line like "NO ./wall.png" and gets the path "./wall.png"
-// It ignores spaces and stops at new line or space.
-// Returns the path as a new string.
 static char	*extract_path(char *line)
 {
 	char	*path;
@@ -28,8 +37,6 @@ static char	*extract_path(char *line)
 	return (path);
 }
 
-// This function sets the path string to correct texture storage.
-// If path already set, returns -1 (duplicate).
 static int	set_texture_path(char **dest, char *path)
 {
 	if (*dest)
@@ -38,8 +45,6 @@ static int	set_texture_path(char **dest, char *path)
 	return (0);
 }
 
-// This function checks which texture line it is (NO, SO, WE, EA)
-// and assigns path to the correct game texture.
 static int	assign_texture(t_game *game, char *line, char *path)
 {
 	if (ft_strncmp(line, "NO ", 3) == 0)
@@ -53,29 +58,23 @@ static int	assign_texture(t_game *game, char *line, char *path)
 	return (0);
 }
 
-// This function parses a texture line from the .cub file
-// Steps:
-// 1. Extract the path using extract_path()
-// 2. It makes sure path of textures ends with ".xpm".
-// 3. Assign it to correct texture using assign_texture()
-// 4. Free temporary path string
-// 5. If duplicate texture found, free all textures and show error
 int	parse_texture_line(t_game *game, char *line)
 {
 	char	*path;
 	int		result;
-	size_t	len;
+	int		fd;
 
 	path = extract_path(line);
 	if (!path)
 		return (ft_error("Error: Memory allocation failed for texture path"));
-	len = ft_strlen(path);
-	if (len < 4 || ft_strncmp(path + len - 4, ".xpm", 4) != 0)
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
 	{
 		destroy_textures(game);
 		free(path);
-		return (ft_error("Error: Texture must be a .xpm image file"));
+		return (ft_error("Error: Texture file not found or not readable"));
 	}
+	close(fd);
 	result = assign_texture(game, line, path);
 	free(path);
 	if (result != 0)

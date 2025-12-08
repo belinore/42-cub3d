@@ -16,7 +16,7 @@ void	load_texture_to_buffer(t_game *g, t_img *img, char *path)
 {
 	img->img_ptr = mlx_xpm_file_to_image(g->mlx, path, &img->width,
 			&img->height);
-	if (!img->img_ptr) //you load south/east/west, the check is wrong
+	if (!img->img_ptr)
 		destroy_display_and_exit(g, "Failed to load texture\n");
 	img->pixel_ptr = mlx_get_data_addr(img->img_ptr, &img->bpp,
 			&img->line_length, &img->endian);

@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_color.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:10:31 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:10:31 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// This function checks if a string has only numbers.
-// It makes sure text like "123" is valid number .
-// If it has any letter like "12A3" → return 0
 static int	is_valid_number(const char *str)
 {
 	int	i;
@@ -19,10 +28,6 @@ static int	is_valid_number(const char *str)
 	return (1);
 }
 
-// This function checks 3 RGB parts and saves them into color box.
-// It makes sure all 3 are numbers and between 0 to 255.
-// If check fails → show error .
-// If ok → store red, green, blue .
 static int	validate_convert_rgb(char **rgb_parts, t_color *color)
 {
 	int	red;
@@ -44,10 +49,6 @@ static int	validate_convert_rgb(char **rgb_parts, t_color *color)
 	return (0);
 }
 
-// This function reads RGB values like "50,100,200".
-// It splits them into 3 parts, checks format, and sends for number checking.
-// If format is not 3 values → error .
-// If ok → call validate_convert_rgb().
 static int	parse_rgb_values(char *rgb_str, t_color *color)
 {
 	char	**rgb_parts;
@@ -62,17 +63,14 @@ static int	parse_rgb_values(char *rgb_str, t_color *color)
 		count++;
 	if (count != 3)
 	{
-		free_split(rgb_parts);
+		free_string(rgb_parts);
 		return (ft_error("Error: RGB format must be R,G,B only 3 values"));
 	}
 	result = validate_convert_rgb(rgb_parts, color);
-	free_split(rgb_parts);
+	free_string(rgb_parts);
 	return (result);
 }
 
-// This function takes a color line like "F 50,20,70" and gets the "50,20,70" part.
-// It skips first word (F or C) and spaces.
-// Returns RGB values as new string.
 static char	*extract_rgb_string(char *line)
 {
 	char	*rgb_str;
@@ -98,14 +96,6 @@ static char	*extract_rgb_string(char *line)
 	return (rgb_str);
 }
 
-// This is the main function that reads floor or sky color from .cub file.
-// Steps:
-// 1. Take the RGB string using extract_rgb_string
-// 2. Check and convert it to color using parse_rgb_values
-// 3. If line starts with "F " → save as floor color
-// 4. If line starts with "C " → save as sky color
-// 5. Free memory at end for safety
-// If any error → stop safely and show message
 int	parse_color_line(t_game *game, char *line)
 {
 	char	*rgb_str;
@@ -129,7 +119,7 @@ int	parse_color_line(t_game *game, char *line)
 	else
 	{
 		free_rgb_textures(game, rgb_str);
-		return (ft_error("Error: Invalid color line must start with 'F ' or 'C' "));
+		return (ft_error("Error: Invalid color line must start with F or C"));
 	}
 	free(rgb_str);
 	return (0);

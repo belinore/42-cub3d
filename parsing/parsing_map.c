@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_map.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:13:14 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:13:14 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// This function calculates the length of a line after removing the last '\n' (new line).
-// It helps to know the real map line size without the new line symbol.
-// If line is NULL, return 0 .
 static int	get_trimed_len(char *line)
 {
 	int	len;
@@ -15,9 +24,6 @@ static int	get_trimed_len(char *line)
 	return (len);
 }
 
-// This function copies the map line into new memory (new string).
-// It copies only valid letters up to "len" size and adds '\0' at end.
-// If memory not given, return NULL
 static char	*dup_map_line(char *line, int len)
 {
 	char	*map_line;
@@ -35,10 +41,6 @@ static char	*dup_map_line(char *line, int len)
 	return (map_line);
 }
 
-// This function makes the map grid (2D array) bigger when new line needs to be added.
-// It copies old lines into new bigger box safely.
-// After copying, it removes (free) the old box to avoid memory waste.
-// If memory not given, show error and return NULL
 static char	**resize_map_grid(char **old_grid, int needed)
 {
 	char	**new_grid;
@@ -63,13 +65,6 @@ static char	**resize_map_grid(char **old_grid, int needed)
 	return (new_grid);
 }
 
-// This function adds one new map line into the game map grid.
-// Steps:
-// 1. Remove new line symbol and get real length
-// 2. Duplicate the map line safely into new memory
-// 3. Make map grid bigger to store this new line
-// 4. Add the line into grid + update map height and width
-// If any step fails, free memory and stop safely
 int	append_map_line(t_game *game, char *line, int line_index)
 {
 	int		len;

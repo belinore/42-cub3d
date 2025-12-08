@@ -12,7 +12,6 @@
 
 #include "cub3d.h"
 
-// DDA algorithm
 void	draw_line(t_img *img, t_point p0, t_point p1, int color)
 {
 	t_point		d;

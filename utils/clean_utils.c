@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   clean_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-12-06 11:16:59 by jmehmy            #+#    #+#             */
+/*   Updated: 2025-12-06 11:16:59 by jmehmy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	destroy_textures(t_game *game)
@@ -18,18 +30,6 @@ void	destroy_textures(t_game *game)
 		mlx_destroy_image(game->mlx, game->textures.east.img_ptr);
 	if (game->textures.south.img_ptr)
 		mlx_destroy_image(game->mlx, game->textures.west.img_ptr);
-}
-
-void	free_split(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
 }
 
 void	free_map(t_game *game)
