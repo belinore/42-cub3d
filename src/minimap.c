@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:58:56 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 19:49:07 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:51:20 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,15 @@ void	draw_minimap_tile(t_game *g, t_point *pixel, int i, int j)
 	if (i < 0 || j < 0 || !g->map.grid[i])
 		return ;
 	else if (!g->map.grid[i][j])
-		draw_tile(g, *pixel, DARK_GREY);
+	{
+		while (j < g->minimap.tile_offset.x + g->minimap.width_map + 1)
+		{
+			draw_tile(g, *pixel, DARK_GREY);
+			pixel->x += g->minimap.tile_size;
+			j++;
+		}
+		return ;
+	}
 	else if (g->map.grid[i][j] == '1')
 		draw_tile(g, *pixel, BLACK);
 	else if (g->map.grid[i][j] == ' ')
@@ -60,6 +68,7 @@ static void	calc_offsets(t_game *g, t_point *tile_offset,
 	tile_offset->y = (int)(g->minimap.camera.y / g->minimap.tile_size);
 	pixel_offset->x = (int)(g->minimap.camera.x) % g->minimap.tile_size;
 	pixel_offset->y = (int)(g->minimap.camera.y) % g->minimap.tile_size;
+	g->minimap.tile_offset = *tile_offset;
 }
 
 void	draw_minimap_view(t_game *g)
@@ -71,20 +80,21 @@ void	draw_minimap_view(t_game *g)
 	t_point		pixel_offset;
 
 	calc_offsets(g, &tile_offset, &pixel_offset);
-	pixel.x = -pixel_offset.x;
 	pixel.y = -pixel_offset.y;
 	i = tile_offset.y;
 	while (i < tile_offset.y + g->minimap.height_map + 1)
 	{
+		if (i >= 0 && !g->map.grid[i])
+			break ;
 		j = tile_offset.x;
 		pixel.x = -pixel_offset.x;
 		while (j < tile_offset.x + g->minimap.width_map + 1)
 		{
 			draw_minimap_tile(g, &pixel, i, j);
+			if (i >= 0 && j >= 0 && !g->map.grid[i][j])
+				break ;
 			j++;
 		}
-		if (i > 0 && !g->map.grid[i])
-			break ;
 		pixel.y += g->minimap.tile_size;
 		i++;
 	}

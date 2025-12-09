@@ -6,7 +6,7 @@
 /*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:16:23 by belinore          #+#    #+#             */
-/*   Updated: 2025/12/08 20:12:52 by belinore         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:51:04 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include <unistd.h>
 
 # define DEBUG_MODE 1
-# define WIDTH 1280 // 640
-# define HEIGHT 720 // 400
+# define WIDTH 1500//1280 // 640
+# define HEIGHT 1000//720 // 400
 
 # define MAX_RAY_LENGTH 1000
 # define ROTATION_SPEED 2
@@ -35,7 +35,7 @@
 # define MOUSE_SENSITIVITY 0.5
 # define VERTICAL_GRIDLINE 0
 # define HORIZONAL_GRIDLINE 1
-# define PLAYER_RADIUS 0.1
+# define PLAYER_RADIUS 0.15
 # define MS_PER_FRAME 1600
 # define PI 3.14159265358979323846
 
@@ -172,6 +172,7 @@ typedef struct s_minimap
 	int			height_pix;
 	t_point		player_pixel;
 	t_pointf	camera;
+	t_point		tile_offset;
 }				t_minimap;
 
 typedef struct s_player
@@ -259,7 +260,7 @@ void		destroy_display_and_exit(t_game *g, char *msg);
 void		init_game(t_game *game);
 
 //init_mlx.c
-void		load_texture_to_buffer(t_game *g, t_img *img, char *path);
+void		load_texture_to_buffer(t_game *g, t_img *img, char *path, char tex);
 void		init_textures(t_game *g);
 void		init_hooks(t_game *g);
 void		init_mlx(t_game *g);

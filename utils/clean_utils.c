@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmehmy <jmehmy@student.42lisboa.com>       #+#  +:+       +#+        */
+/*   By: belinore <belinore@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-12-06 11:16:59 by jmehmy            #+#    #+#             */
-/*   Updated: 2025-12-06 11:16:59 by jmehmy           ###   ########.fr       */
+/*   Created: 2025/12/06 11:16:59 by jmehmy            #+#    #+#             */
+/*   Updated: 2025/12/09 15:30:09 by belinore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	destroy_textures(t_game *game)
 		mlx_destroy_image(game->mlx, game->textures.south.img_ptr);
 	if (game->textures.east.img_ptr)
 		mlx_destroy_image(game->mlx, game->textures.east.img_ptr);
-	if (game->textures.south.img_ptr)
+	if (game->textures.west.img_ptr)
 		mlx_destroy_image(game->mlx, game->textures.west.img_ptr);
 }
 
