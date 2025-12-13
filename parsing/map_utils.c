@@ -39,6 +39,8 @@ static int	is_valid_neighbor(t_game *game, int x, int y)
 		return (0);
 	if (x >= (int)ft_strlen(game->map.grid[y]))
 		return (0);
+	if (game->map.grid[y][x] == ' ')
+		return (0);
 	return (1);
 }
 
